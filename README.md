@@ -5,4 +5,5 @@ Essentially a raspberry pi zero w - powered camera, sensor, and display system f
 
 I want a magnetometer/accelerometer for handling direction (compass), display the time, and of course a camera to take photos every few minutes.  This way, I can automatically record snippets of existence and possibly capture things that I might otherwise miss without having to stop and take pictures with my phone.
 
+Yes - the 'mann' portion of the project name is inspiration from: https://en.wikipedia.org/wiki/Steve_Mann_(inventor)
 
