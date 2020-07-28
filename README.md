@@ -7,3 +7,8 @@ I want a magnetometer/accelerometer for handling direction (compass), display th
 
 Yes - the 'mann' portion of the project name is inspiration from: https://en.wikipedia.org/wiki/Steve_Mann_(inventor)
 
+All CAD files are developed with FreeCAD: https://www.freecadweb.org/
+
+I will not publish .STL files only as that is cheap and it would be nice for people to copy and modify what I've built.
+
+Share and enjoy.
