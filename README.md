@@ -11,4 +11,10 @@ All CAD files are developed with FreeCAD: https://www.freecadweb.org/
 
 I will not publish .STL files only as that is cheap and it would be nice for people to copy and modify what I've built.
 
+As per a meetup - I will add a few things as suggested by the excellent peeps!
+
+
+
 Share and enjoy.
+
+
