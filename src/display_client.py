@@ -32,7 +32,7 @@ class Display:
 
         logging.debug('setting up display')
         self.display = Adafruit_SSD1306.SSD1306_128_64(rst=self.RST)
-        self.font = ImageFont.truetype('/home/pi/VCR_OSD_MONO_1.001.ttf', 32)
+        self.font = ImageFont.truetype('/home/pi/VCR_OSD_MONO_1.001.ttf', 48)
         self.display.begin()
         
     def loop(self):
@@ -66,7 +66,10 @@ class Display:
             draw.text((0,0),clean_msg[1],font=self.font, fill=255)
             self.display.image(im)
             self.display.display()
-    
+        elif command == "clear":
+            self.display.clear()
+            self.display.display()
+            
 if __name__=="__main__":
     DISPLAY = Display()
     DISPLAY.loop()
