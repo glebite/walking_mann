@@ -32,8 +32,8 @@ class Display:
 
         logging.debug('setting up display')
         self.display = Adafruit_SSD1306.SSD1306_128_64(rst=self.RST)
-        self.font = ImageFont.load_default()
-        
+        self.font = ImageFont.truetype('/home/pi/VCR_OSD_MONO_1.001.ttf', 32)
+        self.display.begin()
         
     def loop(self):
         """
@@ -52,29 +52,21 @@ class Display:
         command = clean_msg[0]
         if command == "camera":
             logging.debug("Handling camera")
-            display.clear()
+            self.display.clear()
+            self.display.display()
             image = Image.open('icons/camera_icon.ppm').resize((128,64), Image.ANTIALIAS).convert('1')
-            display.image(image)
-            display.display()
-            image = Image.new('1', (128, 64))
+            self.display.image(image)
+            self.display.display()
         elif command == "time":
             logging.debug("Handling time...")
-            display.clear()
-            image = Image.new('1', (128, 64))
-            draw.text((0,0),clean_msg[1],font=font, fill=255)
-            display.image(image)
-            display.display()
+            self.display.clear()
+            self.display.display()
+            im = Image.new('1',(128,64))
+            draw = ImageDraw.Draw(im)
+            draw.text((0,0),clean_msg[1],font=self.font, fill=255)
+            self.display.image(im)
+            self.display.display()
     
-# display = Adafruit_SSD1306.SSD1306_128_64(rst=RST)
-# font = ImageFont.load_default()
-# image = Image.new('1', (128, 64))
-# draw = ImageDraw.Draw(image)
-
-# display.begin()
-# display.clear()
-# display.display()
-
-
 if __name__=="__main__":
     DISPLAY = Display()
     DISPLAY.loop()
