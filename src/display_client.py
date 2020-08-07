@@ -9,8 +9,13 @@ from PIL import ImageFont
 import time
 import logging
 
-logging.basicConfig(level=logging.DEBUG)
-
+logger = logging.getLogger('display_client')
+logger.setLevel(logging.DEBUG)
+fh = logging.FileHandler('display_client.log')
+fh.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+fh.setFormatter(formatter)
+logger.addHandler(fh)
 
 class Display:
     """
@@ -18,19 +23,19 @@ class Display:
     def __init__(self):
         """
         """
-        logging.debug('initializing...')
+        logger.debug('initializing...')
         self.RST = 24
         self.DC = 23
         self.SPI_PORT = 0
         self.SPI_DEVICE = 0
 
-        logging.debug('creating/connecting MQTT system')
+        logger.debug('creating/connecting MQTT system')
         self.client = mqtt.Client("display")
         self.client.connect("127.0.0.1", port=1883, keepalive=60)
         self.client.subscribe("display")
         self.client.on_message = self.on_message
 
-        logging.debug('setting up display')
+        logger.debug('setting up display')
         self.display = Adafruit_SSD1306.SSD1306_128_64(rst=self.RST)
         self.font = ImageFont.truetype('/home/pi/VCR_OSD_MONO_1.001.ttf', 48)
         self.display.begin()
@@ -38,7 +43,7 @@ class Display:
     def loop(self):
         """
         """
-        logging.debug('entering loop')
+        logger.debug('entering loop')
         self.client.loop_start()
         while True:
             time.sleep(0.1)
@@ -48,27 +53,41 @@ class Display:
         """
         """
         clean_msg = str(message.payload.decode('utf-8')).split(' ')
-        logging.debug('clean message is: {}'.format(clean_msg))
+        logger.debug('clean message is: {}'.format(clean_msg))
         command = clean_msg[0]
         if command == "camera":
-            logging.debug("Handling camera")
-            self.display.clear()
-            self.display.display()
+            logger.debug("Handling camera")
+            rc = self.display.clear()
+            logger.debug('display.clear rc: {}'.format(rc))
+            rc = self.display.display()
+            logger.debug('display.display rc: {}'.format(rc))
             image = Image.open('icons/camera_icon.ppm').resize((128,64), Image.ANTIALIAS).convert('1')
-            self.display.image(image)
-            self.display.display()
+            logger.debug('image creation from local icons folder: {}'.format(image))
+            rc  = self.display.image(image)
+            logger.debug('display.image rc: {}'.format(rc))
+            rc = self.display.display()
+            logger.debug('display.display rc: {}'.format(rc))
         elif command == "time":
-            logging.debug("Handling time...")
-            self.display.clear()
-            self.display.display()
+            logger.debug("Handling time...")
+            rc = self.display.clear()
+            logger.debug('display.clear rc: {}'.format(rc))            
+            rc = self.display.display()
+            logger.debug('display.clear rc: {}'.format(rc))            
+            
             im = Image.new('1',(128,64))
+            logger.debug('image creation: {}'.format(im))
             draw = ImageDraw.Draw(im)
-            draw.text((0,0),clean_msg[1],font=self.font, fill=255)
-            self.display.image(im)
-            self.display.display()
+            rc = draw.text((0,0),clean_msg[1],font=self.font, fill=255)
+            logger.debug('draw results: {}'.format(rc))
+            rc = self.display.image(im)
+            logger.debug('display.image rc: {}'.format(rc))            
+            rc = self.display.display()
+            logger.debug('display.display rc: {}'.format(rc))            
         elif command == "clear":
-            self.display.clear()
-            self.display.display()
+            rc = self.display.clear()
+            logger.debug('display.clear rc: {}'.format(rc))            
+            rc = self.display.display()
+            logger.debug('display.display rc: {}'.format(rc))            
             
 if __name__=="__main__":
     DISPLAY = Display()
