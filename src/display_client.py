@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+"""
+display_client.py - 
+"""
 
 import paho.mqtt.client as mqtt
 import Adafruit_GPIO.SPI as SPI
@@ -19,9 +22,11 @@ logger.addHandler(fh)
 
 class Display:
     """
+    Display
     """
     def __init__(self):
         """
+        __init__
         """
         logger.debug('initializing...')
         self.RST = 24
@@ -42,6 +47,7 @@ class Display:
         
     def loop(self):
         """
+        loop
         """
         logger.debug('entering loop')
         self.client.loop_start()
@@ -51,43 +57,44 @@ class Display:
     
     def on_message(self, client, userdata, message):
         """
+        on_message
         """
         clean_msg = str(message.payload.decode('utf-8')).split(' ')
         logger.debug('clean message is: {}'.format(clean_msg))
         command = clean_msg[0]
         if command == "camera":
             logger.debug("Handling camera")
-            rc = self.display.clear()
-            logger.debug('display.clear rc: {}'.format(rc))
-            rc = self.display.display()
-            logger.debug('display.display rc: {}'.format(rc))
+            return_code = self.display.clear()
+            logger.debug('display.clear rc: {}'.format(return_code))
+            return_code = self.display.display()
+            logger.debug('display.display rc: {}'.format(return_code))
             image = Image.open('icons/camera_icon.ppm').resize((128,64), Image.ANTIALIAS).convert('1')
             logger.debug('image creation from local icons folder: {}'.format(image))
-            rc  = self.display.image(image)
-            logger.debug('display.image rc: {}'.format(rc))
-            rc = self.display.display()
-            logger.debug('display.display rc: {}'.format(rc))
+            return_code = self.display.image(image)
+            logger.debug('display.image rc: {}'.format(return_code))
+            return_code = self.display.display()
+            logger.debug('display.display rc: {}'.format(return_code))
         elif command == "time":
             logger.debug("Handling time...")
-            rc = self.display.clear()
-            logger.debug('display.clear rc: {}'.format(rc))            
-            rc = self.display.display()
-            logger.debug('display.clear rc: {}'.format(rc))            
+            return_code = self.display.clear()
+            logger.debug('display.clear rc: {}'.format(return_code))            
+            return_code = self.display.display()
+            logger.debug('display.clear rc: {}'.format(return_code))            
             
             im = Image.new('1',(128,64))
             logger.debug('image creation: {}'.format(im))
             draw = ImageDraw.Draw(im)
-            rc = draw.text((0,0),clean_msg[1],font=self.font, fill=255)
-            logger.debug('draw results: {}'.format(rc))
-            rc = self.display.image(im)
-            logger.debug('display.image rc: {}'.format(rc))            
-            rc = self.display.display()
-            logger.debug('display.display rc: {}'.format(rc))            
+            return_code = draw.text((0,0),clean_msg[1],font=self.font, fill=255)
+            logger.debug('draw results: {}'.format(return_code))
+            return_code = self.display.image(im)
+            logger.debug('display.image rc: {}'.format(return_code))            
+            return_code = self.display.display()
+            logger.debug('display.display rc: {}'.format(return_code))            
         elif command == "clear":
-            rc = self.display.clear()
-            logger.debug('display.clear rc: {}'.format(rc))            
-            rc = self.display.display()
-            logger.debug('display.display rc: {}'.format(rc))            
+            return_code = self.display.clear()
+            logger.debug('display.clear rc: {}'.format(return_code))            
+            return_code = self.display.display()
+            logger.debug('display.display rc: {}'.format(return_code))            
             
 if __name__=="__main__":
     DISPLAY = Display()
