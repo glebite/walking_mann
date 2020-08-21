@@ -77,24 +77,24 @@ class Display:
         elif command == "time":
             logger.debug("Handling time...")
             return_code = self.display.clear()
-            logger.debug('display.clear rc: {}'.format(return_code))            
+            logger.debug('display.clear rc: {}'.format(return_code))
             return_code = self.display.display()
-            logger.debug('display.clear rc: {}'.format(return_code))            
-            
+            logger.debug('display.clear rc: {}'.format(return_code))          
+
             im = Image.new('1',(128,64))
             logger.debug('image creation: {}'.format(im))
             draw = ImageDraw.Draw(im)
-            return_code = draw.text((0,0),clean_msg[1],font=self.font, fill=255)
+            return_code = draw.text((0,0), clean_msg[1], font=self.font, fill=255)
             logger.debug('draw results: {}'.format(return_code))
             return_code = self.display.image(im)
-            logger.debug('display.image rc: {}'.format(return_code))            
+            logger.debug('display.image rc: {}'.format(return_code))          
             return_code = self.display.display()
-            logger.debug('display.display rc: {}'.format(return_code))            
+            logger.debug('display.display rc: {}'.format(return_code))
         elif command == "clear":
             return_code = self.display.clear()
-            logger.debug('display.clear rc: {}'.format(return_code))            
+            logger.debug('display.clear rc: {}'.format(return_code))
             return_code = self.display.display()
-            logger.debug('display.display rc: {}'.format(return_code))            
+            logger.debug('display.display rc: {}'.format(return_code))
             
 if __name__=="__main__":
     DISPLAY = Display()
