@@ -14,11 +14,11 @@ import logging
 
 logger = logging.getLogger('display_client')
 logger.setLevel(logging.DEBUG)
-fh = logging.FileHandler('display_client.log')
-fh.setLevel(logging.DEBUG)
+FH = logging.FileHandler('display_client.log')
+FH.setLevel(logging.DEBUG)
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-fh.setFormatter(formatter)
-logger.addHandler(fh)
+FH.setFormatter(formatter)
+logger.addHandler(FH)
 
 class Display:
     """
@@ -29,7 +29,7 @@ class Display:
         __init__
         """
         logger.debug('initializing...')
-        self.RST = 24
+        self.RESET = 24
         self.DC = 23
         self.SPI_PORT = 0
         self.SPI_DEVICE = 0
@@ -41,7 +41,7 @@ class Display:
         self.client.on_message = self.on_message
 
         logger.debug('setting up display')
-        self.display = Adafruit_SSD1306.SSD1306_128_64(rst=self.RST)
+        self.display = Adafruit_SSD1306.SSD1306_128_64(rst=self.RESET)
         self.font = ImageFont.truetype('/home/pi/VCR_OSD_MONO_1.001.ttf', 48)
         self.display.begin()
         
@@ -87,7 +87,7 @@ class Display:
             return_code = draw.text((0,0), clean_msg[1], font=self.font, fill=255)
             logger.debug('draw results: {}'.format(return_code))
             return_code = self.display.image(im)
-            logger.debug('display.image rc: {}'.format(return_code))          
+            logger.debug('display.image rc: {}'.format(return_code))
             return_code = self.display.display()
             logger.debug('display.display rc: {}'.format(return_code))
         elif command == "clear":
@@ -95,7 +95,7 @@ class Display:
             logger.debug('display.clear rc: {}'.format(return_code))
             return_code = self.display.display()
             logger.debug('display.display rc: {}'.format(return_code))
-            
-if __name__=="__main__":
+
+if __name__ == "__main__":
     DISPLAY = Display()
     DISPLAY.loop()
